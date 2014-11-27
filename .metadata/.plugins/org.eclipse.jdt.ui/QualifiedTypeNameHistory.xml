@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="android.widget.ListView"/>
+<fullyQualifiedTypeName name="android.view.View"/>
+<fullyQualifiedTypeName name="android.widget.ArrayAdapter"/>
+<fullyQualifiedTypeName name="android.app.ListActivity"/>
+<fullyQualifiedTypeName name="com.example.storageandservices.CountryDbHelper.TasksDbHelper"/>
+<fullyQualifiedTypeName name="com.example.storageandservices.CountryDbHelper"/>
+<fullyQualifiedTypeName name="android.content.Intent"/>
+</qualifiedTypeNameHistroy>
