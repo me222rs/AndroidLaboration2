@@ -1,0 +1,101 @@
+package com.example.storageandservices;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+
+public class CountriesDataSource {
+
+	  // Database fields
+	  private SQLiteDatabase database;
+	  private CountryDbHelper dbHelper;
+	  private String[] allColumns = { CountryDbHelper.COLUMN_ID,
+			  CountryDbHelper.COLUMN_TASK };
+
+	  public CountriesDataSource(Context context) {
+	    dbHelper = new CountryDbHelper(context);
+	  }
+
+	  public void open() throws SQLException {
+	    database = dbHelper.getWritableDatabase();
+	  }
+
+	  public void close() {
+	    dbHelper.close();
+	  }
+
+	  public TodoCountry createTask(String name, int year) {
+	    	ContentValues values = new ContentValues();
+	        values.put(CountryDbHelper.COLUMN_YEAR, year);
+	        values.put(CountryDbHelper.COLUMN_NAME, name);
+
+	        Cursor cursor = database.query(CountryDbHelper.TABLE_COUNTRIES,
+	                allColumns, CountryDbHelper.COLUMN_YEAR + " = '" + year + "'"  + " AND "
+	                + CountryDbHelper.COLUMN_NAME + " = '" + name + "'", null, null, null, CountryDbHelper.COLUMN_YEAR);
+
+	        cursor.moveToLast();
+	        cursor.close();
+	  }
+
+	  public void deleteTask(TodoCountry task) {
+	    long id = task.getId();
+	    System.out.println("Task deleted with id: " + id);
+	    database.delete(CountryDbHelper.TASKS_TABLE_NAME, CountryDbHelper.COLUMN_ID
+	    		+ " = " + id, null);
+	  }
+	  
+	  public TodoCountry getTask(long taskId) {
+		  String restrict = CountryDbHelper.COLUMN_ID + "=" + taskId;
+		  Cursor cursor = database.query(true, CountryDbHelper.TASKS_TABLE_NAME, allColumns, restrict, 
+		    		                        null, null, null, null, null);
+		  if (cursor != null && cursor.getCount() > 0) {
+			  cursor.moveToFirst();
+			  TodoCountry task = cursorToTask(cursor);
+			  return task;
+		  }
+		  // Make sure to close the cursor
+		  cursor.close();
+		  return null;
+	  }
+	  
+	  public boolean updateTask(long taskId, String task) {
+		  ContentValues args = new ContentValues();
+		  args.put(CountryDbHelper.COLUMN_TASK, task);
+
+		  String restrict = CountryDbHelper.COLUMN_ID + "=" + taskId;
+		  return database.update(CountryDbHelper.TASKS_TABLE_NAME, args, restrict , null) > 0;
+	  } 
+
+	  public List<TodoCountry> getAllTasks() {
+	    List<TodoCountry> tasks = new ArrayList<TodoCountry>();
+
+	    Cursor cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+	        allColumns, null, null, null, null, null);
+
+	    cursor.moveToFirst();
+	    while (!cursor.isAfterLast()) {
+	    	TodoCountry task = cursorToTask(cursor);
+	      tasks.add(task);
+	      cursor.moveToNext();
+	    }
+	    // Make sure to close the cursor
+	    cursor.close();
+	    return tasks;
+	  }
+
+	  private TodoCountry cursorToTask(Cursor cursor) {
+		  TodoCountry task = new TodoCountry();
+		  task.setId(cursor.getLong(0));
+		  task.setTask(cursor.getString(1));
+		  return task;
+	  }
+	} 
+
+

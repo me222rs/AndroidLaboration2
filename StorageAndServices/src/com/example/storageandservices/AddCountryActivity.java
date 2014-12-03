@@ -3,6 +3,7 @@ package com.example.storageandservices;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,12 +31,21 @@ public class AddCountryActivity extends Activity {
     public void onClick(View view) {
         // handles add button click
         if (view.getId() == R.id.add) {
-        	EditText text = (EditText)findViewById(R.id.todo);
-        	String todo = text.getText().toString().trim();
-        	if (!todo.isEmpty()) {
+        	EditText editTextCountry = (EditText)findViewById(R.id.country);
+        	EditText editTextYear = (EditText)findViewById(R.id.year);
+        	String country = editTextCountry.getText().toString().trim();
+        	String year = editTextYear.getText().toString().trim();
+        	if (!country.isEmpty()) {
         		// Save the new task to the database
         		//TodoCountry task = datasource.createTask(todo);
-        		datasource.createTask(todo);
+        		datasource.createTask(country, year);
+        		//listAdapter.notifyDataSetChanged();
+        		Intent intent = new Intent(this, VisitedCountriesRevisitedActivity.class);
+        		VisitedCountriesRevisitedActivity vcra = new VisitedCountriesRevisitedActivity();
+        		vcra.finish();
+        		
+        		
+        		startActivity(intent);
         		this.finish();
         		//listAdapter.add(task);
                 //listAdapter.notifyDataSetChanged();
