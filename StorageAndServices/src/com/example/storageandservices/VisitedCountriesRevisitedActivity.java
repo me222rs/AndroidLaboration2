@@ -4,7 +4,9 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -23,6 +25,8 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	CountriesDataSource cds;
 	private int clickedItem;
 	private TodoCountry tc;
+	private String orderBy;
+	SharedPreferences prefs;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,8 +36,10 @@ public class VisitedCountriesRevisitedActivity extends Activity {
         datasource = new CountriesDataSource(this);
         datasource.open();
 
+        //orderBy = prefs.getString("sortBy", "year");
         // get all tasks
-        values = datasource.getAllTasks();
+        orderBy = "name";
+        values = datasource.getAllTasks(orderBy);
 
         // fill ListView with elements
         ListView list = (ListView)findViewById(R.id.list);
@@ -81,8 +87,8 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		tc.setId(country.getId());
 		tc.setTask(country.getTask());
 		tc.setYear(country.getYear());
-		//EditCountryActivity eca = new EditCountryActivity();
-		//eca.dataHandler(tc);
+		Log.i("VisitedCountriesRevisitedActivity", "VisitedCountriesRevisitedActivity.editCountry() — id = " + tc.getId());
+		
 		Intent editCountryIntent = new Intent(this, EditCountryActivity.class);
 		editCountryIntent.putExtra("id", tc.getId());
 		editCountryIntent.putExtra("task", tc.getTask());
@@ -113,23 +119,67 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		getMenuInflater().inflate(R.menu.visited_countries_revisited, menu);
 		return true;
 	}
+	
+	public void sort(String orderBy) {
+		listAdapter.clear();
+        listAdapter.addAll(datasource.getAllTasks(orderBy));
+        listAdapter.notifyDataSetChanged();
+	}
+	
+	public void saveSortBy(String orderBy) {
+		SharedPreferences.Editor edit = prefs.edit();
+		prefs.edit().putString("sortBy", orderBy).commit();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-        //A new activity starts when the Add button is pressed in the action bar
-        if (id == R.id.action_add) {
+		
+		switch (item.getItemId()) {
+    	case R.id.action_settings:
+    		return true;
+        case R.id.order_by_year:
+        	orderBy = "yearDESC";
+        	//saveSortBy(orderBy);
+            sort(orderBy);
+            return true;
+        case R.id.order_by_name:
+        	orderBy = "nameDESC";
+        	//saveSortBy(orderBy);
+        	sort(orderBy);
+            return true;
+        case R.id.order_by_yearASC:
+        	orderBy = "yearASC";
+        	//saveSortBy(orderBy);
+        	sort(orderBy);
+            return true;
+        case R.id.order_by_nameASC:
+        	orderBy = "nameASC";
+        	//saveSortBy(orderBy);
+        	sort(orderBy);
+            return true;
+        case R.id.action_add:
             Intent productIntent = new Intent(this,AddCountryActivity.class);
             startActivity(productIntent);
             this.finish();
             return true;
-        }
-		return super.onOptionsItemSelected(item);
+        default:
+            return super.onOptionsItemSelected(item);
+    }
+		
+		//int id = item.getItemId();
+		//if (id == R.id.action_settings) {
+		//	return true;
+		//}
+        //A new activity starts when the Add button is pressed in the action bar
+        //if (id == R.id.action_add) {
+        //    Intent productIntent = new Intent(this,AddCountryActivity.class);
+        //    startActivity(productIntent);
+        //    this.finish();
+        //    return true;
+        //}
+		//return super.onOptionsItemSelected(item);
 	}
 }

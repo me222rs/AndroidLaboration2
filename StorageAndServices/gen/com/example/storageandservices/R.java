@@ -30,6 +30,10 @@ public final class R {
         public static final int add=0x7f080002;
         public static final int country=0x7f080000;
         public static final int list=0x7f080004;
+        public static final int order_by_name=0x7f080008;
+        public static final int order_by_nameASC=0x7f08000a;
+        public static final int order_by_year=0x7f080007;
+        public static final int order_by_yearASC=0x7f080009;
         public static final int textViewHeaderMain=0x7f080003;
         public static final int year=0x7f080001;
     }

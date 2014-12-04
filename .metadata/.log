@@ -6822,3 +6822,6 @@ Binding(ALT+SHIFT+ARROW_UP,
 
 !ENTRY com.android.ide.eclipse.adt 4 0 2014-12-04 12:07:23.954
 !MESSAGE Current file is not a match for the given config.
+
+!ENTRY org.eclipse.ui 4 4 2014-12-04 14:31:58.895
+!MESSAGE Referenced part does not exist yet: org.eclipse.ui.views.ProblemView.

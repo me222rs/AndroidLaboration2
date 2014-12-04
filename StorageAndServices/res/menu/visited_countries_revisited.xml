@@ -8,8 +8,26 @@
         android:showAsAction="never"
         android:title="@string/action_settings"/>
     <item
-            android:id="@+id/action_add"
+        android:id="@+id/action_add"
         android:showAsAction="never"
         android:title="Add"/>
+    <item
+        android:id="@+id/order_by_year"
+        android:showAsAction="never"
+        android:title="Order by year(DESC)"/>
+    <item
+        android:id="@+id/order_by_name"
+        android:showAsAction="never"
+        android:title="Order by name(DESC)"/>
+    <item
+        android:id="@+id/order_by_yearASC"
+        android:showAsAction="never"
+        android:title="Order by year(ASC)"/>
+    <item
+        android:id="@+id/order_by_nameASC"
+        android:showAsAction="never"
+        android:title="Order by name(ASC)"/>
+    
+
 
 </menu>

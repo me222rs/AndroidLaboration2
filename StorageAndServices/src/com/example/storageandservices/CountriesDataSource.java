@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class CountriesDataSource {
 
@@ -65,20 +66,47 @@ public class CountriesDataSource {
 		  return null;
 	  }
 	  
-	  public boolean updateTask(TodoCountry tc) {
+	  public void updateTask(TodoCountry tc) {
+		  open();
+		  Log.i("EditCountryActivity", "CountriesDataSource.updateTask() — id = " + tc.getYear());
 		  ContentValues args = new ContentValues();
 		  args.put(CountryDbHelper.COLUMN_TASK, tc.getTask());
 		  args.put(CountryDbHelper.COLUMN_YEAR, tc.getYear());
 		  String restrict = CountryDbHelper.COLUMN_ID + "=" + tc.getId();
-		  return database.update(CountryDbHelper.TASKS_TABLE_NAME, args, restrict , null) > 0;
+		  
+		  Log.i("EditCountryActivity", "CountriesDataSource.updateTask() — bool is = " + database);
+		  
+		  database.update(CountryDbHelper.TASKS_TABLE_NAME, args, restrict , null);
+		  //Log.i("EditCountryActivity", "CountriesDataSource.updateTask() — bool is = " + i);
+		  
+		  database.close();
+		  //return i;
 	  } 
 
-	  public List<TodoCountry> getAllTasks() {
+	  public List<TodoCountry> getAllTasks(String orderBy) {
 	    List<TodoCountry> tasks = new ArrayList<TodoCountry>();
 
-	    Cursor cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
-	        allColumns, null, null, null, null, null);
-
+	    Cursor cursor;
+	    if(orderBy.equals("nameDESC")){
+	    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+	        allColumns, null, null, null, null, dbHelper.COLUMN_TASK + " DESC");
+	    } 
+	    else if(orderBy.equals("yearDESC")){
+	    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+		    allColumns, null, null, null, null, dbHelper.COLUMN_YEAR + " DESC");
+	    }
+	    else if(orderBy.equals("yearASC")){
+		    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+				    allColumns, null, null, null, null, dbHelper.COLUMN_YEAR + " ASC");
+	    }
+	    else if(orderBy.equals("nameASC")){
+		    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+				    allColumns, null, null, null, null, dbHelper.COLUMN_TASK + " ASC");
+	    }
+	    else{
+		    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+				    allColumns, null, null, null, null, null);
+	    }
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
 	    	TodoCountry task = cursorToTask(cursor);
@@ -92,7 +120,7 @@ public class CountriesDataSource {
 
 	  private TodoCountry cursorToTask(Cursor cursor) {
 		  TodoCountry task = new TodoCountry();
-		  task.setId(cursor.getLong(0));
+		  task.setId(cursor.getInt(0));
 		  task.setYear(cursor.getString(1));
 		  task.setTask(cursor.getString(2));
 		  
