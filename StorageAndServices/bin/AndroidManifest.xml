@@ -30,6 +30,10 @@
             android:name=".AddCountryActivity"
             android:label="@string/title_activity_add_country" >
         </activity>
+        <activity
+            android:name=".EditCountryActivity"
+            android:label="@string/title_activity_edit_country" >
+        </activity>
     </application>
 
 </manifest>

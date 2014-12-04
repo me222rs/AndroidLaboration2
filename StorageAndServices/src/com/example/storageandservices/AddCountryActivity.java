@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,15 +32,18 @@ public class AddCountryActivity extends Activity {
     public void onClick(View view) {
         // handles add button click
         if (view.getId() == R.id.add) {
+        	TodoCountry todoshit = new TodoCountry();
         	EditText editTextCountry = (EditText)findViewById(R.id.country);
         	EditText editTextYear = (EditText)findViewById(R.id.year);
-        	String country = editTextCountry.getText().toString().trim();
-        	String year = editTextYear.getText().toString().trim();
-        	if (!country.isEmpty()) {
+        	todoshit.setTask(editTextCountry.getText().toString().trim());
+        	todoshit.setYear(editTextYear.getText().toString().trim());
+        	//String year = editTextYear.getText().toString().trim();
+        	if (true) {
         		// Save the new task to the database
         		//TodoCountry task = datasource.createTask(todo);
-        		datasource.createTask(country, year);
+        		datasource.createTask(todoshit);
         		//listAdapter.notifyDataSetChanged();
+        		//Log.v(TAG, "index=" + i);
         		Intent intent = new Intent(this, VisitedCountriesRevisitedActivity.class);
         		VisitedCountriesRevisitedActivity vcra = new VisitedCountriesRevisitedActivity();
         		vcra.finish();
@@ -50,6 +54,7 @@ public class AddCountryActivity extends Activity {
         		//listAdapter.add(task);
                 //listAdapter.notifyDataSetChanged();
         	}
+        
         }
       }
 

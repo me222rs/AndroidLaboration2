@@ -5,9 +5,12 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -17,6 +20,9 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	private CountriesDataSource datasource;
 	private List<TodoCountry> values;
 	public ArrayAdapter<TodoCountry> listAdapter;
+	CountriesDataSource cds;
+	private int clickedItem;
+	private TodoCountry tc;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +44,55 @@ public class VisitedCountriesRevisitedActivity extends Activity {
         //listAdapter.notifyDataSetChanged();
 	}
 	
-
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		// TODO Auto-generated method stub
+		super.onCreateContextMenu(menu, v, menuInfo);
+		AdapterContextMenuInfo acmi = (AdapterContextMenuInfo) menuInfo;
+		clickedItem = acmi.position;
+		TodoCountry item = listAdapter.getItem(clickedItem);
+		menu.setHeaderTitle("Edit or delete" + item);
+		menu.add(1,1,1,"Edit");
+		menu.add(1,2,2, "Delete");
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		tc = new TodoCountry();
+		String title = (String) item.getTitle();
+		TodoCountry country = listAdapter.getItem(clickedItem);
+		tc.setId(country.getId());
+		tc.setTask(country.getTask());
+		tc.setYear(country.getYear());
+		
+		if(title.equals("Edit")) {
+			editCountry(tc);
+		} else if(title.equals("Delete")){
+			datasource.deleteTask(tc);
+		}
+		return true;
+	}
+	
+	public void editCountry(TodoCountry tc) {
+		TodoCountry country = listAdapter.getItem(clickedItem);
+		tc.setId(country.getId());
+		tc.setTask(country.getTask());
+		tc.setYear(country.getYear());
+		//EditCountryActivity eca = new EditCountryActivity();
+		//eca.dataHandler(tc);
+		Intent editCountryIntent = new Intent(this, EditCountryActivity.class);
+		editCountryIntent.putExtra("id", tc.getId());
+		editCountryIntent.putExtra("task", tc.getTask());
+		editCountryIntent.putExtra("year", tc.getYear());
+		startActivity(editCountryIntent);
+	}
+	
+	public TodoCountry getValues(){
+		return tc;
+	}
     
     
     @Override

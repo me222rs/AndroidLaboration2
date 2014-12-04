@@ -6,5 +6,6 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_visited_countries_revisited">VisitedCountriesRevisitedActivity</string>
     <string name="title_activity_add_country">AddCountryActivity</string>
+    <string name="title_activity_edit_country">EditCountryActivity</string>
 
 </resources>

@@ -17,7 +17,7 @@ public class CountriesDataSource {
 	  private SQLiteDatabase database;
 	  private CountryDbHelper dbHelper;
 	  private String[] allColumns = { CountryDbHelper.COLUMN_ID,
-			  CountryDbHelper.COLUMN_TASK };
+			  CountryDbHelper.COLUMN_YEAR, CountryDbHelper.COLUMN_TASK };
 
 	  public CountriesDataSource(Context context) {
 	    dbHelper = new CountryDbHelper(context);
@@ -31,10 +31,10 @@ public class CountriesDataSource {
 	    dbHelper.close();
 	  }
 
-	  public TodoCountry createTask(String task, String year) {
+	  public void createTask(TodoCountry todoshit) {
 	    ContentValues values = new ContentValues();
-	    values.put(CountryDbHelper.COLUMN_TASK, task);
-	    //values.put(CountryDbHelper.COLUMN_YEAR, year);
+	    values.put(CountryDbHelper.COLUMN_TASK, todoshit.getTask());
+	    values.put(CountryDbHelper.COLUMN_YEAR, todoshit.getYear());
 	    long insertId = database.insert(CountryDbHelper.TASKS_TABLE_NAME, null, values);
 	    Cursor cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
 	        allColumns, CountryDbHelper.COLUMN_ID + " = " + insertId, null,
@@ -42,12 +42,11 @@ public class CountriesDataSource {
 	    cursor.moveToFirst();
 	    TodoCountry newTask = cursorToTask(cursor);
 	    cursor.close();
-	    return newTask;
+	    //return newTask;
 	  }
 
 	  public void deleteTask(TodoCountry task) {
 	    long id = task.getId();
-	    System.out.println("Task deleted with id: " + id);
 	    database.delete(CountryDbHelper.TASKS_TABLE_NAME, CountryDbHelper.COLUMN_ID
 	    		+ " = " + id, null);
 	  }
@@ -66,11 +65,11 @@ public class CountriesDataSource {
 		  return null;
 	  }
 	  
-	  public boolean updateTask(long taskId, String task) {
+	  public boolean updateTask(TodoCountry tc) {
 		  ContentValues args = new ContentValues();
-		  args.put(CountryDbHelper.COLUMN_TASK, task);
-
-		  String restrict = CountryDbHelper.COLUMN_ID + "=" + taskId;
+		  args.put(CountryDbHelper.COLUMN_TASK, tc.getTask());
+		  args.put(CountryDbHelper.COLUMN_YEAR, tc.getYear());
+		  String restrict = CountryDbHelper.COLUMN_ID + "=" + tc.getId();
 		  return database.update(CountryDbHelper.TASKS_TABLE_NAME, args, restrict , null) > 0;
 	  } 
 
@@ -94,7 +93,9 @@ public class CountriesDataSource {
 	  private TodoCountry cursorToTask(Cursor cursor) {
 		  TodoCountry task = new TodoCountry();
 		  task.setId(cursor.getLong(0));
-		  task.setTask(cursor.getString(1));
+		  task.setYear(cursor.getString(1));
+		  task.setTask(cursor.getString(2));
+		  
 		  return task;
 	  }
 	} 
