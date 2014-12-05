@@ -1,6 +1,5 @@
 package com.example.storageandservices;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -172,19 +171,23 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		
 		
 	}
-	/*
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
-		outState.putStringArrayList("countries", values);
+		outState.putStringArrayList("countries", list);
+		outState.putString("colorPref", color);
+		outState.putString("sizePref", textSize);
 		saveSortBy(orderBy);
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		listAdapter = savedInstanceState.("listAdapter");
+		list = savedInstanceState.getStringArrayList("countries");
+		textSize = savedInstanceState.getString("sizePref");
+		color = savedInstanceState.getString("colorPref");
+		setBackgroundColor(color);
 		super.onRestoreInstanceState(savedInstanceState);
 	}
-	*/
 }

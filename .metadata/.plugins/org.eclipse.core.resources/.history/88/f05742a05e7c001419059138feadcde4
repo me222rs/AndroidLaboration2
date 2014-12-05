@@ -1,6 +1,5 @@
 package com.example.storageandservices;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -39,7 +38,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 
         //orderBy = prefs.getString("sortBy", "year");
         // get all tasks
-        orderBy = "nameASC";
+        orderBy = "name";
         values = datasource.getAllTasks(orderBy);
 
         // fill ListView with elements
@@ -170,21 +169,17 @@ public class VisitedCountriesRevisitedActivity extends Activity {
             return super.onOptionsItemSelected(item);
     }
 		
-		
+		//int id = item.getItemId();
+		//if (id == R.id.action_settings) {
+		//	return true;
+		//}
+        //A new activity starts when the Add button is pressed in the action bar
+        //if (id == R.id.action_add) {
+        //    Intent productIntent = new Intent(this,AddCountryActivity.class);
+        //    startActivity(productIntent);
+        //    this.finish();
+        //    return true;
+        //}
+		//return super.onOptionsItemSelected(item);
 	}
-	/*
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		outState.putStringArrayList("countries", values);
-		saveSortBy(orderBy);
-		super.onSaveInstanceState(outState);
-	}
-
-	@Override
-	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		listAdapter = savedInstanceState.("listAdapter");
-		super.onRestoreInstanceState(savedInstanceState);
-	}
-	*/
 }

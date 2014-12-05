@@ -37,9 +37,9 @@ public class VisitedCountriesRevisitedActivity extends Activity {
         datasource = new CountriesDataSource(this);
         datasource.open();
 
-        //orderBy = prefs.getString("sortBy", "year");
+        orderBy = prefs.getString("sortBy", "year");
         // get all tasks
-        orderBy = "nameASC";
+        //orderBy = "nameASC";
         values = datasource.getAllTasks(orderBy);
 
         // fill ListView with elements
@@ -143,22 +143,22 @@ public class VisitedCountriesRevisitedActivity extends Activity {
     		return true;
         case R.id.order_by_year:
         	orderBy = "yearDESC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
             sort(orderBy);
             return true;
         case R.id.order_by_name:
         	orderBy = "nameDESC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
         	sort(orderBy);
             return true;
         case R.id.order_by_yearASC:
         	orderBy = "yearASC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
         	sort(orderBy);
             return true;
         case R.id.order_by_nameASC:
         	orderBy = "nameASC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
         	sort(orderBy);
             return true;
         case R.id.action_add:

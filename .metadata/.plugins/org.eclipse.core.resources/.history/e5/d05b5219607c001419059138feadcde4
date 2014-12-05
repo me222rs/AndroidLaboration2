@@ -1,6 +1,5 @@
 package com.example.storageandservices;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -172,7 +171,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		
 		
 	}
-	/*
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
@@ -183,8 +182,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		listAdapter = savedInstanceState.("listAdapter");
+		listAdapter = savedInstanceState.getStringArrayList("listAdapter");
 		super.onRestoreInstanceState(savedInstanceState);
 	}
-	*/
 }

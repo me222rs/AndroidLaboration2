@@ -40,7 +40,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
         //orderBy = prefs.getString("sortBy", "year");
         // get all tasks
         orderBy = "nameASC";
-        values = datasource.getAllTasks(orderBy);
+        values = datasource.getAllTasks(orderBy));
 
         // fill ListView with elements
         ListView list = (ListView)findViewById(R.id.list);
