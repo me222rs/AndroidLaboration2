@@ -7,5 +7,10 @@
     <string name="title_activity_visited_countries_revisited">VisitedCountriesRevisitedActivity</string>
     <string name="title_activity_add_country">AddCountryActivity</string>
     <string name="title_activity_edit_country">EditCountryActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_background_color">BackgroundColor</string>
+    <string name="title_activity_text_size">TextSizeActivity</string>
+    <string name="size_settings">Text Size</string>
+    <string name="pref_background_color">Background color</string>
 
 </resources>

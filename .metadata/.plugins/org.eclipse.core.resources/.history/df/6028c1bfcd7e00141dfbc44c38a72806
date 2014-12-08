@@ -1,0 +1,7 @@
+package com.example.storageandservices;
+
+public class Settings extends PreferenceActivity {
+	
+	protected void onCreate
+	
+}

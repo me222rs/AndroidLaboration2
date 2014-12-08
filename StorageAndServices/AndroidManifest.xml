@@ -34,6 +34,18 @@
             android:name=".EditCountryActivity"
             android:label="@string/title_activity_edit_country" >
         </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings" >
+        </activity>
+        <activity
+            android:name=".settings.BackgroundColor"
+            android:label="@string/title_activity_background_color" >
+        </activity>
+        <activity
+            android:name="com.example.storageandservices.settings.TextSizeActivity"
+            android:label="@string/title_activity_text_size" >
+        </activity>
     </application>
 
 </manifest>

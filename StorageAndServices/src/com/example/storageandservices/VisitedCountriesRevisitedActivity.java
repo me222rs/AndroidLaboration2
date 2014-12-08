@@ -3,24 +3,30 @@ package com.example.storageandservices;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class VisitedCountriesRevisitedActivity extends Activity {
 
 	private CountriesDataSource datasource;
+	ArrayList<String> list;
 	private List<TodoCountry> values;
 	public ArrayAdapter<TodoCountry> listAdapter;
 	CountriesDataSource cds;
@@ -28,27 +34,90 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	private TodoCountry tc;
 	private String orderBy;
 	SharedPreferences prefs;
+	View colorLayout;
+	String color;
+	TextView size;
+	String textSize;
 	
+	ListView listview;
+	
+	@SuppressLint("ViewHolder")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_visited_countries_revisited);
 		
         datasource = new CountriesDataSource(this);
         datasource.open();
 
-        //orderBy = prefs.getString("sortBy", "year");
+        orderBy = prefs.getString("sortBy", "yearASC");
         // get all tasks
-        orderBy = "nameASC";
-        values = datasource.getAllTasks(orderBy);
+        //orderBy = "nameASC";
+        
+        /*
+        values = (ArrayList<TodoCountry>) datasource.getAllTasks(orderBy);
 
+        
+        listview.setAdapter(listAdapter = new ArrayAdapter<TodoCountry>(this, R.layout.layout_row, values){
+        	
+        	@Override
+		    public View getView(int position, View row, ViewGroup parent) {
+        		System.out.println(listAdapter);
+		    	TodoCountry data = getItem(position);
+		    	row = getLayoutInflater().inflate(R.layout.layout_row, parent, false);
+		    	size = (TextView) row.findViewById(R.id.label);
+		    	textSize = prefs.getString("sizePref", "2");
+		    	
+		    	if(textSize.equals("1")) {
+					size.setTextSize(12);
+				} 
+		    	else if(textSize.equals("2")) {
+					size.setTextSize(20);
+				} 
+		    	else if(textSize.equals("3")) {
+					size.setTextSize(35);
+				}		    	
+		    	size.setText(data.getTask());
+		        return size;
+        	}
+        });
+        */
+        
+        values = datasource.getAllTasks(orderBy);
+  
+        //size = (TextView)findViewById(R.id.textViewHeader);
+        
         // fill ListView with elements
         ListView list = (ListView)findViewById(R.id.list);
-        listAdapter = new ArrayAdapter<TodoCountry>(this,
-            android.R.layout.simple_list_item_1, values);
+       
+        
+        
+        listAdapter = new ArrayAdapter<TodoCountry>(this, android.R.layout.simple_list_item_1, values);
         list.setAdapter(listAdapter);
+        
         registerForContextMenu(list);
         //listAdapter.notifyDataSetChanged();
+        
+    	
+    	size = (TextView)findViewById(R.id.textViewHeader);
+    	textSize = prefs.getString("sizePref", "3");
+		//Standard textsize will be 20, "2"
+    	if(textSize.equals("1")) {
+			size.setTextSize(12);
+		} 
+    	else if(textSize.equals("2")) {
+			size.setTextSize(20);
+		} 
+    	else if(textSize.equals("3")) {
+			size.setTextSize(35);
+		}
+        
+        
+        colorLayout = findViewById(R.id.layout);
+		color = prefs.getString("colorPref", "1");
+		setBackgroundColor("color");
+        
 	}
 	
 	
@@ -123,7 +192,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	
 	public void sort(String orderBy) {
 		listAdapter.clear();
-        listAdapter.addAll(datasource.getAllTasks(orderBy));
+		listAdapter.addAll(datasource.getAllTasks(orderBy));
         listAdapter.notifyDataSetChanged();
 	}
 	
@@ -140,25 +209,28 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		
 		switch (item.getItemId()) {
     	case R.id.action_settings:
+    		Intent settings = new Intent(this, com.example.storageandservices.settings.SettingsActivity.class);
+    		startActivity(settings);
     		return true;
+    		//return true;
         case R.id.order_by_year:
         	orderBy = "yearDESC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
             sort(orderBy);
             return true;
         case R.id.order_by_name:
         	orderBy = "nameDESC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
         	sort(orderBy);
             return true;
         case R.id.order_by_yearASC:
         	orderBy = "yearASC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
         	sort(orderBy);
             return true;
         case R.id.order_by_nameASC:
         	orderBy = "nameASC";
-        	//saveSortBy(orderBy);
+        	saveSortBy(orderBy);
         	sort(orderBy);
             return true;
         case R.id.action_add:
@@ -172,19 +244,44 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		
 		
 	}
-	/*
+	
+	public void setBackgroundColor(String color) { 
+		if(color.equals("1")){
+			colorLayout.setBackgroundColor(Color.WHITE);
+		}
+		else if(color.equals("2")) {
+			colorLayout.setBackgroundColor(Color.GREEN);
+		} 
+		else if(color.equals("3")) {
+			colorLayout.setBackgroundColor(Color.BLUE);
+		} 
+		else if(color.equals("4")) {
+			colorLayout.setBackgroundColor(Color.MAGENTA);
+		} 
+		else if(color.equals("5")) {
+			colorLayout.setBackgroundColor(Color.YELLOW);
+		} 
+	}
+	
+	
+	
+	
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
-		outState.putStringArrayList("countries", values);
+		outState.putStringArrayList("values", list);
+		outState.putString("colorPref", color);
+		//outState.putString("sizePref", textSize);
 		saveSortBy(orderBy);
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
-		listAdapter = savedInstanceState.("listAdapter");
+		list = savedInstanceState.getStringArrayList("values");
+		//textSize = savedInstanceState.getString("sizePref");
+		color = savedInstanceState.getString("colorPref");
+		setBackgroundColor(color);
 		super.onRestoreInstanceState(savedInstanceState);
 	}
-	*/
+	
 }
