@@ -43,8 +43,16 @@
             android:label="@string/title_activity_background_color" >
         </activity>
         <activity
-            android:name="com.example.storageandservices.settings.TextSizeActivity"
+            android:name=".settings.TextSizeActivity"
             android:label="@string/title_activity_text_size" >
+        </activity>
+        <activity
+            android:name=".alarmclock.AlarmClockActivity"
+            android:label="@string/title_activity_alarm_clock" >
+        </activity>
+        <activity
+            android:name="com.example.storageandservices.alarmclock.AlarmHandler"
+            android:label="@string/title_activity_alarm_handler" >
         </activity>
     </application>
 

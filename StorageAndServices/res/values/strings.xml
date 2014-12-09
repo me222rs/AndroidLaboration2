@@ -12,5 +12,7 @@
     <string name="title_activity_text_size">TextSizeActivity</string>
     <string name="size_settings">Text Size</string>
     <string name="pref_background_color">Background color</string>
+    <string name="title_activity_alarm_clock">AlarmClockActivity</string>
+    <string name="title_activity_alarm_handler">AlarmHandler</string>
 
 </resources>

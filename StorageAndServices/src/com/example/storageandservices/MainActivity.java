@@ -1,5 +1,7 @@
 package com.example.storageandservices;
 
+import com.example.storageandservices.alarmclock.AlarmClockActivity;
+
 import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
@@ -14,7 +16,7 @@ import android.widget.ListView;
 public class MainActivity extends ListActivity {
 	
 
-	String classes[] = { "Visited Countries Revisited"};
+	String classes[] = { "Visited Countries Revisited", "Alarm Clock"};
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +54,14 @@ public class MainActivity extends ListActivity {
 	{
 	     // TODO Auto-generated method stub
 	     super.onListItemClick(l, v, position, id);
-
+	     Intent intent;
 	if (position == 0) {
-	Intent intent = new Intent(this, VisitedCountriesRevisitedActivity.class);
+	intent = new Intent(this, VisitedCountriesRevisitedActivity.class);
 	startActivity(intent);
+	}
+	if(position == 1) {
+		intent = new Intent(this, AlarmClockActivity.class);
+		startActivity(intent);
 
 	 }
 	}

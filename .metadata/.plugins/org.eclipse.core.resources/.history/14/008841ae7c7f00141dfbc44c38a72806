@@ -1,0 +1,76 @@
+package com.example.storageandservices.alarmclock;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.example.storageandservices.R;
+import com.example.storageandservices.R.id;
+import com.example.storageandservices.R.layout;
+import com.example.storageandservices.R.menu;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.os.Message;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+public class AlarmClockActivity extends Activity {
+	
+	static TextView timeNowToShow;
+	int messagePeriod = 5000;
+	TimePicker timePicker;
+	int alarmHour;
+	int alarmMinute;
+	boolean isAlarmSet = false;
+	SharedPreferences sharedPreferences;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_alarm_clock);
+		
+		timeNowToShow = (TextView) findViewById(R.id.textViewShowTime);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		timePicker = (TimePicker) findViewById(R.id.timePicker);
+		timePicker.setIs24HourView(true);			
+
+		Timer timer = new Timer();
+		TimerTask timerTask = new TimerTask() {
+			public void run() {
+				Message message = new Message();
+				mHandler.sendMessage(message);
+			}
+		};
+		timer.scheduleAtFixedRate(timerTask, 0, messagePeriod);
+	}
+	
+	static Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			showCurrentTime();
+		}
+	};
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.alarm_clock, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

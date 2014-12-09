@@ -1,0 +1,99 @@
+package com.example.storageandservices.alarmclock;
+
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.example.storageandservices.R;
+import com.example.storageandservices.R.id;
+import com.example.storageandservices.R.layout;
+import com.example.storageandservices.R.menu;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+public class AlarmClockActivity extends Activity {
+	
+	static TextView timeNowToShow;
+	int messagePeriod = 5000;
+	TimePicker timePicker;
+	int alarmHour;
+	int alarmMinute;
+	boolean isAlarmSet = false;
+	SharedPreferences sharedPreferences;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_alarm_clock);
+		
+		timeNowToShow = (TextView) findViewById(R.id.textViewShowTime);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		timePicker = (TimePicker) findViewById(R.id.timePicker);
+		timePicker.setIs24HourView(true);			
+
+		Timer timer = new Timer();
+		TimerTask timerTask = new TimerTask() {
+			public void run() {
+				Message message = new Message();
+				mHandler.sendMessage(message);
+			}
+		};
+		timer.scheduleAtFixedRate(timerTask, 0, messagePeriod);
+	}
+	
+	static Handler mHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			showCurrentTime();
+		}
+	};
+	
+	public static void showCurrentTime() {
+		final Calendar c = Calendar.getInstance();
+		final int hour = c.get(Calendar.HOUR_OF_DAY);
+		final int minute = c.get(Calendar.MINUTE);
+		final int seconds = c.get(Calendar.SECOND);		
+		
+		// set current time into textview
+		timeNowToShow.setText(new StringBuilder()
+				.append(setOneNumberFormat(hour))
+				.append(".").append(setOneNumberFormat(minute))
+				.append(".").append(setOneNumberFormat(seconds)));
+	}
+	
+	private static String setOneNumberFormat(int time) {
+		if (time > 9)
+		   return String.valueOf(time);
+		else
+		   return "0" + String.valueOf(time);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.alarm_clock, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}
