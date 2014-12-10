@@ -4,12 +4,12 @@
     
     <header
             android:id="@+id/backgroundColorSettings"
-            android:fragment="sharedpreferences.BackgroundColor"
+            android:fragment="com.example.storageandservices.settings.BackgroundColor"
             android:title="@string/pref_background_color" />
     
     <header
             android:id="@+id/textSizeSettings"
-            android:fragment="sharedpreferences.TextSize"
+            android:fragment="com.example.storageandservices.settings.TextSizeActivity"
             android:title="@string/size_settings" />
     
 </preference-headers>

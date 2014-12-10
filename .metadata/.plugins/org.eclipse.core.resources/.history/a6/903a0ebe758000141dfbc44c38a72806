@@ -1,0 +1,211 @@
+package com.example.storageandservices.alarmclock;
+
+import java.sql.Date;
+import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.example.storageandservices.R;
+import com.example.storageandservices.R.id;
+import com.example.storageandservices.R.layout;
+import com.example.storageandservices.R.menu;
+
+import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.preference.PreferenceManager;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.TimePicker;
+
+public class AlarmClockActivity extends Activity {
+	
+	static TextView timeNowToShow;
+	int time = 1000;
+	SharedPreferences sharedPreferences;
+    String closeMessage = "Close";
+	int alarmMinute;
+	TimePicker tp;
+	int alarmHour;
+    AlarmManager alarmManager;
+	boolean AlarmIsSet = false;
+    BroadcastReceiver receiver;
+    PendingIntent pendingIntent;
+    private final String alarmManagerAction = "alarmManagerAction";
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_alarm_clock);
+		
+		timeNowToShow = (TextView) findViewById(R.id.clock);
+		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		tp = (TimePicker) findViewById(R.id.timePicker);
+		tp.setIs24HourView(true);			
+
+		Timer timer = new Timer();
+		TimerTask timerTask = new TimerTask() {
+			public void run() {
+				Message msg = new Message();
+				MessageHandler.sendMessage(msg);
+			}
+		};
+		timer.scheduleAtFixedRate(timerTask, 0, time);
+	}
+	
+	static Handler MessageHandler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			showCurrentTime();
+		}
+	};
+	
+	public static void showCurrentTime() {
+		final Calendar calendar = Calendar.getInstance();
+		final int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		final int minute = calendar.get(Calendar.MINUTE);
+		final int seconds = calendar.get(Calendar.SECOND);		
+		
+		// set current time into textview
+		timeNowToShow.setText(new StringBuilder()
+				.append(setOneNumberFormat(hour))
+				.append(".").append(setOneNumberFormat(minute))
+				.append(".").append(setOneNumberFormat(seconds)));
+	}
+	
+	private static String setOneNumberFormat(int time) {
+		if (time > 9)
+		   return String.valueOf(time);
+		else
+		   return "0" + String.valueOf(time);
+	}
+	
+	public void onClick(View view) {
+		switch (view.getId()) {
+	        case R.id.setAlarmButton:	        	
+	        	setAlarm();
+	    		break;
+		}
+	}
+	//This method sets the alarm
+	public void setAlarm() {
+		//sets the default value of the timepicker to the current time
+		Calendar currentTime = Calendar.getInstance();
+		java.util.Date now = currentTime.getTime();
+		
+		//this gets the input value from the timepicker
+		alarmHour  = tp.getCurrentHour();
+    	alarmMinute = tp.getCurrentMinute();
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.MINUTE, alarmMinute);
+		calendar.set(Calendar.HOUR_OF_DAY, alarmHour);
+		calendar.set(Calendar.SECOND, 00);
+        
+		long time = calendar.getTimeInMillis();
+		java.util.Date alarmDate = calendar.getTime();		
+		
+		//if alarm time is set after the current time
+		if(alarmDate.after(now)) {
+			setNewAlarm(time);
+			if(AlarmIsSet == true) {
+				//is displayed if the alarm has already been set
+				openDialog("Note", "Alarm is changed to \n" + calendar.getTime(), closeMessage);
+			} else {
+				openDialog("Note", "Alarm is set to: \n" + calendar.getTime(), closeMessage);
+			}
+			AlarmIsSet = true;
+		} 
+		
+		//if alarm time is set before the current time
+		else {
+			//If the chosen time has passed, one day will be added
+			calendar.add(Calendar.DATE, 1);
+			time = calendar.getTimeInMillis();
+			setNewAlarm(time);
+			
+			if(AlarmIsSet == true) {
+				//is displayed if the alarm has already been set
+				openDialog("Note", "Alarm is changed to \n" + calendar.getTime(), closeMessage);
+			} else {
+				openDialog("Note", "Alarm is set to \n" + calendar.getTime(), closeMessage);
+			}
+			AlarmIsSet = true;
+		}
+	}
+	
+
+	
+	
+	protected void setNewAlarm(long alarmTime) {		
+    	IntentFilter filter = new IntentFilter();
+    	filter.addAction(alarmManagerAction);
+    	
+        if (this.receiver == null) {
+            this.receiver = new BroadcastReceiver() {
+				@Override//Opens alarm activity
+                public void onReceive(Context context, Intent intent) {
+                    Intent alarmIntent = new Intent(context, AlarmHandler.class);
+                    ((Activity)context).startActivityForResult(alarmIntent, 4);
+                }
+            };
+            pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(alarmManagerAction),0 );
+            this.registerReceiver(this.receiver, filter);
+        }
+        alarmManager = (AlarmManager)(this.getSystemService(Context.ALARM_SERVICE));
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+    }
+	
+	
+	public void openDialog(String title, String msg, String button) {
+    	new AlertDialog.Builder(this).setTitle(title).setMessage(msg)
+    	    .setNegativeButton(button, new DialogInterface.OnClickListener() {
+    	        public void onClick(DialogInterface dialogInterface, int which) { 
+    	        	dialogInterface.cancel();
+    	        }
+    	    }).show();
+    }
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {   
+		if(requestCode == 4) {
+			if(resultCode == RESULT_OK) {
+				AlarmIsSet = false;
+				openDialog("ALARM", "The alarm is off.", closeMessage);
+			}
+		}
+	}
+	
+	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.alarm_clock, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+}

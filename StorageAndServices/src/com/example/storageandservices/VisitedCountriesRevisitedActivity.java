@@ -27,8 +27,10 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 
 	private CountriesDataSource datasource;
 	ArrayList<String> list;
+	//private List<String> values;
 	private List<TodoCountry> values;
 	public ArrayAdapter<TodoCountry> listAdapter;
+	//public ArrayAdapter<String> listAdapter;
 	CountriesDataSource cds;
 	private int clickedItem;
 	private TodoCountry tc;
@@ -39,6 +41,10 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	TextView size;
 	String textSize;
 	
+	ListView countrylist;
+	List<TodoCountry> countries;
+	CountryAdapter adapter;
+	
 	ListView listview;
 	
 	@SuppressLint("ViewHolder")
@@ -48,6 +54,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		setContentView(R.layout.activity_visited_countries_revisited);
 		
+		listview = (ListView) findViewById(R.id.list);
         datasource = new CountriesDataSource(this);
         datasource.open();
 
@@ -55,7 +62,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
         // get all tasks
         //orderBy = "nameASC";
         
-        /*
+        
         values = (ArrayList<TodoCountry>) datasource.getAllTasks(orderBy);
 
         
@@ -63,8 +70,9 @@ public class VisitedCountriesRevisitedActivity extends Activity {
         	
         	@Override
 		    public View getView(int position, View row, ViewGroup parent) {
+        		registerForContextMenu(listview);
         		System.out.println(listAdapter);
-		    	TodoCountry data = getItem(position);
+        		TodoCountry data = getItem(position);
 		    	row = getLayoutInflater().inflate(R.layout.layout_row, parent, false);
 		    	size = (TextView) row.findViewById(R.id.label);
 		    	textSize = prefs.getString("sizePref", "2");
@@ -78,68 +86,48 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 		    	else if(textSize.equals("3")) {
 					size.setTextSize(35);
 				}		    	
-		    	size.setText(data.getTask());
+		    	size.setText(data.toString());
 		        return size;
         	}
         });
-        */
-        
-        values = datasource.getAllTasks(orderBy);
-  
-        //size = (TextView)findViewById(R.id.textViewHeader);
-        
-        // fill ListView with elements
-        ListView list = (ListView)findViewById(R.id.list);
-       
         
         
-        listAdapter = new ArrayAdapter<TodoCountry>(this, android.R.layout.simple_list_item_1, values);
-        list.setAdapter(listAdapter);
-        
-        registerForContextMenu(list);
-        //listAdapter.notifyDataSetChanged();
-        
-    	
-    	size = (TextView)findViewById(R.id.textViewHeader);
-    	textSize = prefs.getString("sizePref", "3");
-		//Standard textsize will be 20, "2"
-    	if(textSize.equals("1")) {
-			size.setTextSize(12);
-		} 
-    	else if(textSize.equals("2")) {
-			size.setTextSize(20);
-		} 
-    	else if(textSize.equals("3")) {
-			size.setTextSize(35);
-		}
-        
-        
-        colorLayout = findViewById(R.id.layout);
+        colorLayout = findViewById(R.id.layout);		
 		color = prefs.getString("colorPref", "1");
-		setBackgroundColor("color");
+		setBackgroundColor(color);
         
+      
 	}
 	
 	
+	
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		
 		// TODO Auto-generated method stub
 		super.onCreateContextMenu(menu, v, menuInfo);
 		AdapterContextMenuInfo acmi = (AdapterContextMenuInfo) menuInfo;
 		clickedItem = acmi.position;
+		
 		TodoCountry item = listAdapter.getItem(clickedItem);
 		menu.setHeaderTitle("Edit or delete" + item);
 		menu.add(1,1,1,"Edit");
 		menu.add(1,2,2, "Delete");
+		
 	}
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
+		
+		
 		// TODO Auto-generated method stub
 		tc = new TodoCountry();
 		String title = (String) item.getTitle();
+		
+		
 		TodoCountry country = listAdapter.getItem(clickedItem);
+		
+		
 		tc.setId(country.getId());
 		tc.setTask(country.getTask());
 		tc.setYear(country.getYear());
@@ -192,8 +180,12 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	
 	public void sort(String orderBy) {
 		listAdapter.clear();
+		
 		listAdapter.addAll(datasource.getAllTasks(orderBy));
+
+		
         listAdapter.notifyDataSetChanged();
+        
 	}
 	
 	public void saveSortBy(String orderBy) {
@@ -278,7 +270,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	@Override
 	public void onRestoreInstanceState(Bundle savedInstanceState) {
 		list = savedInstanceState.getStringArrayList("values");
-		//textSize = savedInstanceState.getString("sizePref");
+		textSize = savedInstanceState.getString("sizePref");
 		color = savedInstanceState.getString("colorPref");
 		setBackgroundColor(color);
 		super.onRestoreInstanceState(savedInstanceState);

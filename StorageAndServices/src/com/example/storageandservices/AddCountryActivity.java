@@ -12,12 +12,14 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class AddCountryActivity extends Activity {
 
 	private CountriesDataSource datasource;
 	private List<TodoCountry> values;
 	private ArrayAdapter<TodoCountry> listAdapter;
+	boolean validate;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,10 +37,12 @@ public class AddCountryActivity extends Activity {
         	TodoCountry todoshit = new TodoCountry();
         	EditText editTextCountry = (EditText)findViewById(R.id.country);
         	EditText editTextYear = (EditText)findViewById(R.id.year);
+        	validation(editTextCountry.getText().toString(), editTextYear.getText().toString());
+        	//validate = false;
         	todoshit.setTask(editTextCountry.getText().toString().trim());
         	todoshit.setYear(editTextYear.getText().toString().trim());
         	//String year = editTextYear.getText().toString().trim();
-        	if (true) {
+        	if (validate == true) {
         		// Save the new task to the database
         		//TodoCountry task = datasource.createTask(todo);
         		datasource.createTask(todoshit);
@@ -51,12 +55,25 @@ public class AddCountryActivity extends Activity {
         		
         		startActivity(intent);
         		this.finish();
-        		//listAdapter.add(task);
-                //listAdapter.notifyDataSetChanged();
+        	}
+        	else{
+        		Toast.makeText(getApplicationContext(), "Country can not be empty or contain numbers and year must be a number",
+        				   Toast.LENGTH_LONG).show();
         	}
         
         }
       }
+    public void validation(String country, String year){
+    	//boolean validates = false;
+    	
+    	if(country.length() == 0 || country == null || country.matches(".*\\d.*") || year.length() == 0 || year == null || !year.matches("[0-9]+")){
+    		validate = false;
+    	}
+    	else{
+    		validate = true;
+    	}
+    	//return validates;
+    }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

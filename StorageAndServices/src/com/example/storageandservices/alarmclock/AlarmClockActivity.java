@@ -34,15 +34,15 @@ public class AlarmClockActivity extends Activity {
 	
 	static TextView timeNowToShow;
 	int time = 1000;
-	TimePicker timePicker;
-	int alarmHour;
-	int alarmMinute;
-	boolean isAlarmSet = false;
-    BroadcastReceiver receiver;
-    PendingIntent pendingIntent;
+	SharedPreferences sharedPreferences;
+    String closeMessage = "Close";
+	int minute;
+	TimePicker tp;
+	int hour;
     AlarmManager alarmManager;
-    SharedPreferences sharedPreferences;
-    String dialogCloseString = "Close";
+	boolean AlarmIsSet = false;
+    BroadcastReceiver broadcastReceiver;
+    PendingIntent pendingIntent;
     private final String alarmManagerAction = "alarmManagerAction";
 
 	@Override
@@ -53,8 +53,9 @@ public class AlarmClockActivity extends Activity {
 		timeNowToShow = (TextView) findViewById(R.id.clock);
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
-		timePicker = (TimePicker) findViewById(R.id.timePicker);
-		timePicker.setIs24HourView(true);			
+		tp = (TimePicker) findViewById(R.id.timePicker);
+		//this sets the timepicker into 24 hour mode
+		tp.setIs24HourView(true);			
 
 		Timer timer = new Timer();
 		TimerTask timerTask = new TimerTask() {
@@ -100,43 +101,50 @@ public class AlarmClockActivity extends Activity {
 	    		break;
 		}
 	}
-	
+	//This method sets the alarm
 	public void setAlarm() {
+		//sets the default value of the timepicker to the current time
 		Calendar currentTime = Calendar.getInstance();
 		java.util.Date now = currentTime.getTime();
 		
-		//Gets the alarm time from the timepicker.
-		alarmHour  = timePicker.getCurrentHour();
-    	alarmMinute = timePicker.getCurrentMinute();
+		//this gets the input value from the timepicker
+		hour  = tp.getCurrentHour();
+		minute = tp.getCurrentMinute();
 		
 		Calendar calendar = Calendar.getInstance();
-		calendar.set(Calendar.HOUR_OF_DAY, alarmHour);
-		calendar.set(Calendar.MINUTE, alarmMinute);
-		calendar.set(Calendar.SECOND, 00);//Set alarm seconds to zero
+		calendar.set(Calendar.MINUTE, minute);
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.SECOND, 00);
         
 		long time = calendar.getTimeInMillis();
 		java.util.Date alarmDate = calendar.getTime();		
 		
+		//if alarm time is set after the current time
 		if(alarmDate.after(now)) {
 			setNewAlarm(time);
-			if(isAlarmSet == true) {
-				openDialog("Note", "Alarm is changed to \n" + calendar.getTime(), dialogCloseString);
+			if(AlarmIsSet == true) {
+				//is displayed if the alarm has already been set
+				openDialog("Note", "Alarm is changed to \n" + calendar.getTime(), closeMessage);
 			} else {
-				openDialog("Note", "Alarm is set to: \n" + calendar.getTime(), dialogCloseString);
+				openDialog("Note", "Alarm is set to: \n" + calendar.getTime(), closeMessage);
 			}
-			isAlarmSet = true;
+			AlarmIsSet = true;
 		} 
-		else if(currentTime.equals(alarmDate) || currentTime.after(alarmDate)) {
-			//If the time has passed, set alarm next day
-			calendar.add(Calendar.DATE, 1);//add 1 day
+		
+		//if alarm time is set before the current time
+		else {
+			//If the chosen time has passed, one day will be added
+			calendar.add(Calendar.DATE, 1);
 			time = calendar.getTimeInMillis();
 			setNewAlarm(time);
-			if(isAlarmSet) {
-				openDialog("Note", "Alarm is changed to \n" + calendar.getTime(), dialogCloseString);
+			
+			if(AlarmIsSet == true) {
+				//is displayed if the alarm has already been set
+				openDialog("Note", "Alarm is changed to \n" + calendar.getTime(), closeMessage);
 			} else {
-				openDialog("Note", "Alarm is set to \n" + calendar.getTime(), dialogCloseString);
+				openDialog("Note", "Alarm is set to \n" + calendar.getTime(), closeMessage);
 			}
-			isAlarmSet = true;
+			AlarmIsSet = true;
 		}
 	}
 	
@@ -144,10 +152,11 @@ public class AlarmClockActivity extends Activity {
 	
 	
 	protected void setNewAlarm(long alarmTime) {		
-    	IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(alarmManagerAction);
-        if (this.receiver == null) {
-            this.receiver = new BroadcastReceiver() {
+    	IntentFilter filter = new IntentFilter();
+    	filter.addAction(alarmManagerAction);
+    	
+        if (this.broadcastReceiver == null) {
+            this.broadcastReceiver = new BroadcastReceiver() {
 				@Override//Opens alarm activity
                 public void onReceive(Context context, Intent intent) {
                     Intent alarmIntent = new Intent(context, AlarmHandler.class);
@@ -155,7 +164,7 @@ public class AlarmClockActivity extends Activity {
                 }
             };
             pendingIntent = PendingIntent.getBroadcast(this, 0, new Intent(alarmManagerAction),0 );
-            this.registerReceiver(this.receiver, intentFilter);
+            this.registerReceiver(this.broadcastReceiver, filter);
         }
         alarmManager = (AlarmManager)(this.getSystemService(Context.ALARM_SERVICE));
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
@@ -174,8 +183,8 @@ public class AlarmClockActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {   
 		if(requestCode == 4) {
 			if(resultCode == RESULT_OK) {
-				isAlarmSet = false;
-				openDialog("ALARM", "The alarm is off.", dialogCloseString);
+				AlarmIsSet = false;
+				openDialog("ALARM", "The alarm is off.", closeMessage);
 			}
 		}
 	}

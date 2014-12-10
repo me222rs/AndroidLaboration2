@@ -6,11 +6,13 @@ import com.example.storageandservices.R.layout;
 import com.example.storageandservices.R.menu;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,14 +28,42 @@ public class AlarmHandler extends Activity {
 		setContentView(R.layout.alarm);
 		
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON|
+				WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
+				
 	            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD|
-	            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED|
+	            
 	            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
+		//You can start youtube app and play a video if the alarm goes off
 		   //startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.youtube.com/watch?v=3YOYlgvI1uE")));
+		 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
+		 // Vibrate for 500 milliseconds
+		 v.vibrate(2000);
+		 
 		mediaPlayer = MediaPlayer.create(this, R.raw.fire);
 		mediaPlayer.start();
+		  
+		long[] pattern = {
+		    0,  // Start immediately
+		    
+		    //Plays a custom melody with the vibrator
+		    
+		    100, 200, 100, 200, 100, 200,
+		    100, 200, 100, 100, 100, 100,
+		    100, 200, 100, 200, 100, 200,
+		    100, 200, 100, 100, 100, 100,
+		    100, 200, 100, 200, 100, 200,
+		    100, 200, 100, 100, 100, 100,
+		    100, 100, 100, 100, 100, 100,
+		    50, 50, 100, 800
+		    
+		    
+		};
+		 
+		// -1 means that it wont repeat
+		v.vibrate(pattern, -1);
+
 		
 		
 	}

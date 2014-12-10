@@ -46,12 +46,23 @@ public class CountriesDataSource {
 	    //return newTask;
 	  }
 
+	  
 	  public void deleteTask(TodoCountry task) {
 	    long id = task.getId();
 	    database.delete(CountryDbHelper.TASKS_TABLE_NAME, CountryDbHelper.COLUMN_ID
 	    		+ " = " + id, null);
 	  }
-	  
+
+	  /*
+	  public void deleteTask(int year, String country) {
+	    	String[] whereArgs = new String[2];
+	    	whereArgs[0] = year+"";
+	    	whereArgs[1] = country;
+	    	//Sql to delete a post
+	    	database.delete(CountryDbHelper.TASKS_TABLE_NAME, CountryDbHelper.COLUMN_YEAR + " = ? AND " + 
+	    			CountryDbHelper.COLUMN_TASK + " = ? ", whereArgs);
+		  }
+	  */
 	  public TodoCountry getTask(long taskId) {
 		  String restrict = CountryDbHelper.COLUMN_ID + "=" + taskId;
 		  Cursor cursor = database.query(true, CountryDbHelper.TASKS_TABLE_NAME, allColumns, restrict, 
@@ -82,6 +93,42 @@ public class CountriesDataSource {
 		  database.close();
 		  //return i;
 	  } 
+	/*  
+	  public List<String> getAllTasks(String orderBy) {
+		    List<String> tasks = new ArrayList<String>();
+
+		    Cursor cursor;
+		    if(orderBy.equals("nameDESC")){
+		    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+		        allColumns, null, null, null, null, dbHelper.COLUMN_TASK + " DESC");
+		    } 
+		    else if(orderBy.equals("yearDESC")){
+		    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+			    allColumns, null, null, null, null, dbHelper.COLUMN_YEAR + " DESC");
+		    }
+		    else if(orderBy.equals("yearASC")){
+			    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+					    allColumns, null, null, null, null, dbHelper.COLUMN_YEAR + " ASC");
+		    }
+		    else if(orderBy.equals("nameASC")){
+			    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+					    allColumns, null, null, null, null, dbHelper.COLUMN_TASK + " ASC");
+		    }
+		    else{
+			    cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
+					    allColumns, null, null, null, null, null);
+		    }
+		    cursor.moveToFirst();
+		    while (!cursor.isAfterLast()) {
+		    	//TodoCountry task = cursorToTask(cursor);
+		    	tasks.add(cursor.getInt(0) + "  " + cursor.getString(1));
+		      cursor.moveToNext();
+		    }
+		    // Make sure to close the cursor
+		    cursor.close();
+		    return tasks;
+		  }
+	  */
 
 	  public List<TodoCountry> getAllTasks(String orderBy) {
 	    List<TodoCountry> tasks = new ArrayList<TodoCountry>();

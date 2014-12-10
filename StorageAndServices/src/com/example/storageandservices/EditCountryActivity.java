@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class EditCountryActivity extends Activity {
 
@@ -23,6 +24,7 @@ public class EditCountryActivity extends Activity {
 	private int id;
     private String task;
     private String year;
+    boolean validate;
 	
 	
 	@Override
@@ -59,8 +61,12 @@ public class EditCountryActivity extends Activity {
         	todoshit.setId(this.id);
         	todoshit.setTask(editTextCountry.getText().toString().trim());
         	todoshit.setYear(editTextYear.getText().toString().trim());
+        	
+        	validation(editTextCountry.getText().toString(), editTextYear.getText().toString());
+        	
+        	
         	//String year = editTextYear.getText().toString().trim();
-        	//if (true) {
+        	if (validate == true) {
         		// Save the new task to the database
         		//TodoCountry task = datasource.createTask(todo);
         		datasource.updateTask(todoshit);
@@ -73,15 +79,28 @@ public class EditCountryActivity extends Activity {
         		
         		startActivity(intent);
         		this.finish();
-        		//listAdapter.add(task);
-                //listAdapter.notifyDataSetChanged();
-        	//}
+        	}
+        	else{
+        		Toast.makeText(getApplicationContext(), "Country can not be empty or contain numbers and year must be a number",
+     				   Toast.LENGTH_LONG).show();
+        	}
         
         }
       }
 	
 	
 	
+	private void validation(String country, String year) {
+		// TODO Auto-generated method stub
+    	if(country.length() == 0 || country == null || country.matches(".*\\d.*") || year.length() == 0 || year == null || !year.matches("[0-9]+")){
+    		validate = false;
+    	}
+    	else{
+    		validate = true;
+    	}
+	}
+
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
