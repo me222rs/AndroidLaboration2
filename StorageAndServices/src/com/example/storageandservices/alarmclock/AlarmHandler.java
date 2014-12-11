@@ -39,7 +39,7 @@ public class AlarmHandler extends Activity {
 		   //startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.youtube.com/watch?v=3YOYlgvI1uE")));
 		 Vibrator v = (Vibrator) this.getSystemService(Context.VIBRATOR_SERVICE);
 		 // Vibrate for 500 milliseconds
-		 v.vibrate(2000);
+		 //v.vibrate(2000);
 		 
 		mediaPlayer = MediaPlayer.create(this, R.raw.fire);
 		mediaPlayer.start();
@@ -57,6 +57,7 @@ public class AlarmHandler extends Activity {
 		    100, 200, 100, 100, 100, 100,
 		    100, 100, 100, 100, 100, 100,
 		    50, 50, 100, 800
+		    
 		    
 		    
 		};

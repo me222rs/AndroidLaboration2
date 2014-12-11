@@ -25,35 +25,35 @@
         </activity>
         <activity
             android:name=".VisitedCountriesRevisitedActivity"
-            android:label="@string/title_activity_visited_countries_revisited" >
+            android:label="@string/visited_countries_revisited" >
         </activity>
         <activity
             android:name=".AddCountryActivity"
-            android:label="@string/title_activity_add_country" >
+            android:label="@string/add_country" >
         </activity>
         <activity
             android:name=".EditCountryActivity"
-            android:label="@string/title_activity_edit_country" >
+            android:label="@string/edit_country" >
         </activity>
         <activity
             android:name=".settings.SettingsActivity"
-            android:label="@string/title_activity_settings" >
+            android:label="@string/settings" >
         </activity>
         <activity
             android:name=".settings.BackgroundColor"
-            android:label="@string/title_activity_background_color" >
+            android:label="@string/background_color" >
         </activity>
         <activity
             android:name=".settings.TextSizeActivity"
-            android:label="@string/title_activity_text_size" >
+            android:label="@string/text_size" >
         </activity>
         <activity
             android:name=".alarmclock.AlarmClockActivity"
-            android:label="@string/title_activity_alarm_clock" >
+            android:label="@string/alarm_clock" >
         </activity>
         <activity
             android:name="com.example.storageandservices.alarmclock.AlarmHandler"
-            android:label="@string/title_activity_alarm_handler" >
+            android:label="@string/alarm_handler" >
         </activity>
     </application>
 

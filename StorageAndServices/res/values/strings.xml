@@ -4,15 +4,21 @@
     <string name="app_name">Storage and Services</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_visited_countries_revisited">VisitedCountriesRevisitedActivity</string>
-    <string name="title_activity_add_country">AddCountryActivity</string>
-    <string name="title_activity_edit_country">EditCountryActivity</string>
-    <string name="title_activity_settings">SettingsActivity</string>
-    <string name="title_activity_background_color">BackgroundColor</string>
-    <string name="title_activity_text_size">TextSizeActivity</string>
+    <string name="visited_countries_revisited">VisitedCountriesRevisitedActivity</string>
+    <string name="add_country">AddCountryActivity</string>
+    <string name="edit_country">EditCountryActivity</string>
+    <string name="settings">SettingsActivity</string>
+    <string name="background_color">BackgroundColor</string>
+    <string name="text_size">TextSizeActivity</string>
     <string name="size_settings">Text Size</string>
     <string name="pref_background_color">Background color</string>
-    <string name="title_activity_alarm_clock">AlarmClockActivity</string>
-    <string name="title_activity_alarm_handler">AlarmHandler</string>
+    <string name="alarm_clock">AlarmClockActivity</string>
+    <string name="alarm_handler">AlarmHandler</string>
+    <string name="alarm_button">Set Alarm!</string>
+    <string name="stop_alarm">Stop Alarm!</string>
+    <string name="add_button">Add</string>
+    <string name="country">Country</string>
+    <string name="year">Year</string>
+    <string name="save">Save</string>
 
 </resources>

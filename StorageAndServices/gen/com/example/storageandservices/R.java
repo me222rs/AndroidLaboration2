@@ -78,18 +78,24 @@ public final class R {
     }
     public static final class string {
         public static final int action_settings=0x7f080002;
+        public static final int add_button=0x7f08000f;
+        public static final int add_country=0x7f080004;
+        public static final int alarm_button=0x7f08000d;
+        public static final int alarm_clock=0x7f08000b;
+        public static final int alarm_handler=0x7f08000c;
         public static final int app_name=0x7f080000;
+        public static final int background_color=0x7f080007;
+        public static final int country=0x7f080010;
+        public static final int edit_country=0x7f080005;
         public static final int hello_world=0x7f080001;
         public static final int pref_background_color=0x7f08000a;
+        public static final int save=0x7f080012;
+        public static final int settings=0x7f080006;
         public static final int size_settings=0x7f080009;
-        public static final int title_activity_add_country=0x7f080004;
-        public static final int title_activity_alarm_clock=0x7f08000b;
-        public static final int title_activity_alarm_handler=0x7f08000c;
-        public static final int title_activity_background_color=0x7f080007;
-        public static final int title_activity_edit_country=0x7f080005;
-        public static final int title_activity_settings=0x7f080006;
-        public static final int title_activity_text_size=0x7f080008;
-        public static final int title_activity_visited_countries_revisited=0x7f080003;
+        public static final int stop_alarm=0x7f08000e;
+        public static final int text_size=0x7f080008;
+        public static final int visited_countries_revisited=0x7f080003;
+        public static final int year=0x7f080011;
     }
     public static final class style {
         /** 

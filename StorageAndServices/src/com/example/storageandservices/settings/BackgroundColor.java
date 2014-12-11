@@ -19,6 +19,7 @@ public class BackgroundColor extends PreferenceFragment  {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.activity_background_color);
+		
 	}
 
 }

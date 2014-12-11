@@ -1,5 +1,6 @@
 package com.example.storageandservices;
 
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.Activity;
@@ -92,7 +93,15 @@ public class EditCountryActivity extends Activity {
 	
 	private void validation(String country, String year) {
 		// TODO Auto-generated method stub
-    	if(country.length() == 0 || country == null || country.matches(".*\\d.*") || year.length() == 0 || year == null || !year.matches("[0-9]+")){
+  	Calendar c = Calendar.getInstance(); 
+    	
+    	int currentYear = c.get(Calendar.YEAR);
+    	int intYear = Integer.parseInt(year);
+    	
+    	
+    	if(year.length() > 4 || country.length() == 0 || country == null 
+    	|| country.matches(".*\\d.*") || year.length() == 0 || year == null 
+    	|| !year.matches("[0-9]+") || intYear > currentYear || country.length() > 40){
     		validate = false;
     	}
     	else{

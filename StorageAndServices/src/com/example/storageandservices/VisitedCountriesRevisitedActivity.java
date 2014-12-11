@@ -43,7 +43,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	
 	ListView countrylist;
 	List<TodoCountry> countries;
-	CountryAdapter adapter;
+	
 	
 	ListView listview;
 	
@@ -136,6 +136,9 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 			editCountry(tc);
 		} else if(title.equals("Delete")){
 			datasource.deleteTask(tc);
+            Intent productIntent = new Intent(this,VisitedCountriesRevisitedActivity.class);
+            startActivity(productIntent);
+            this.finish();
 		}
 		return true;
 	}
@@ -161,14 +164,18 @@ public class VisitedCountriesRevisitedActivity extends Activity {
     
     @Override
     protected void onResume() {
-      datasource.open();
-      super.onResume();
+    	datasource.open();
+    	color = prefs.getString("colorPref", color);
+    	setBackgroundColor(color);
+    	textSize = prefs.getString("sizePref", textSize);
+    	listAdapter.notifyDataSetChanged();
+    	super.onResume();
     }
 
     @Override
     protected void onPause() {
-      datasource.close();
-      super.onPause();
+    	datasource.close();
+    	super.onPause();
     }
 
 	@Override
@@ -189,7 +196,6 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	}
 	
 	public void saveSortBy(String orderBy) {
-		SharedPreferences.Editor edit = prefs.edit();
 		prefs.edit().putString("sortBy", orderBy).commit();
 	}
 
@@ -203,6 +209,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
     	case R.id.action_settings:
     		Intent settings = new Intent(this, com.example.storageandservices.settings.SettingsActivity.class);
     		startActivity(settings);
+    		//this.finish();
     		return true;
     		//return true;
         case R.id.order_by_year:
@@ -262,7 +269,7 @@ public class VisitedCountriesRevisitedActivity extends Activity {
 	protected void onSaveInstanceState(Bundle outState) {
 		outState.putStringArrayList("values", list);
 		outState.putString("colorPref", color);
-		//outState.putString("sizePref", textSize);
+		outState.putString("sizePref", textSize);
 		saveSortBy(orderBy);
 		super.onSaveInstanceState(outState);
 	}

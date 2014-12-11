@@ -13,7 +13,7 @@
         android:id="@+id/country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Country" />
+        android:hint="@string/country" />
 
     <EditText
         android:id="@+id/year"
@@ -21,7 +21,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/country"
         android:inputType="number"
-        android:hint="Year" />
+        android:maxLength="4"
+        android:hint="@string/year" />
 
     <Button
         android:id="@+id/add"
@@ -29,6 +30,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/year"
         android:onClick="onClick"
-        android:text="Add" />
+        android:text="@string/add_button" />
 
 </RelativeLayout>

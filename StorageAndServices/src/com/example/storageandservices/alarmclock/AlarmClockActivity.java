@@ -51,7 +51,6 @@ public class AlarmClockActivity extends Activity {
 		setContentView(R.layout.activity_alarm_clock);
 		
 		timeNowToShow = (TextView) findViewById(R.id.clock);
-		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		tp = (TimePicker) findViewById(R.id.timePicker);
 		//this sets the timepicker into 24 hour mode
@@ -157,7 +156,7 @@ public class AlarmClockActivity extends Activity {
     	
         if (this.broadcastReceiver == null) {
             this.broadcastReceiver = new BroadcastReceiver() {
-				@Override//Opens alarm activity
+				@Override
                 public void onReceive(Context context, Intent intent) {
                     Intent alarmIntent = new Intent(context, AlarmHandler.class);
                     ((Activity)context).startActivityForResult(alarmIntent, 4);
@@ -184,7 +183,7 @@ public class AlarmClockActivity extends Activity {
 		if(requestCode == 4) {
 			if(resultCode == RESULT_OK) {
 				AlarmIsSet = false;
-				openDialog("ALARM", "The alarm is off.", closeMessage);
+				openDialog("ALARM", "The alarm was turned off.", closeMessage);
 			}
 		}
 	}

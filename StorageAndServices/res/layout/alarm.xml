@@ -14,6 +14,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:onClick="onClick"
-        android:text="Stop alarm" />
+        android:text="@string/stop_alarm" />
 
 </RelativeLayout>

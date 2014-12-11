@@ -32,10 +32,10 @@ public class CountriesDataSource {
 	    dbHelper.close();
 	  }
 
-	  public void createTask(TodoCountry todoshit) {
+	  public void createTask(TodoCountry countries) {
 	    ContentValues values = new ContentValues();
-	    values.put(CountryDbHelper.COLUMN_TASK, todoshit.getTask());
-	    values.put(CountryDbHelper.COLUMN_YEAR, todoshit.getYear());
+	    values.put(CountryDbHelper.COLUMN_TASK, countries.getTask());
+	    values.put(CountryDbHelper.COLUMN_YEAR, countries.getYear());
 	    long insertId = database.insert(CountryDbHelper.TASKS_TABLE_NAME, null, values);
 	    Cursor cursor = database.query(CountryDbHelper.TASKS_TABLE_NAME,
 	        allColumns, CountryDbHelper.COLUMN_ID + " = " + insertId, null,

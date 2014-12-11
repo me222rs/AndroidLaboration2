@@ -24,7 +24,7 @@
         android:layout_centerHorizontal="true"
         android:clickable="true"        
         android:onClick="onClick"
-        android:text="Set alarm" />
+        android:text="@string/alarm_button" />
 
     <TextView
         android:id="@+id/clock"

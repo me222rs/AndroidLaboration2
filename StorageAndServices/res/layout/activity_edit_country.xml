@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/year"
         android:onClick="onClick"
-        android:text="Save" />
+        android:text="@string/save" />
 
 </RelativeLayout>
 
